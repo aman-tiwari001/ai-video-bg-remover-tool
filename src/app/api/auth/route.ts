@@ -11,7 +11,7 @@ export async function POST(req: Request) {
 				{ status: 400 }
 			);
 		}
-		const { first_name, last_name, email_addresses, image_url } = data;
+		const { first_name, last_name, email_addresses, image_url, userId } = data;
 		const email = email_addresses[0].email_address;
 		const existingUser = await UserModel.findOne({ email });
 		if (existingUser) {
@@ -21,6 +21,7 @@ export async function POST(req: Request) {
 			);
 		}
 		const user = await UserModel.create({
+			clerkId: userId,
 			firstName: first_name,
 			lastName: last_name,
 			email,
