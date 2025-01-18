@@ -3,6 +3,7 @@ import { model, models, Schema } from 'mongoose';
 
 const UserSchema: Schema<IUser> = new Schema(
 	{
+		clerkId: { type: String, required: true, unique: true, trim: true },
 		firstName: { type: String, required: true, trim: true },
 		lastName: { type: String, required: true, trim: true },
 		email: {
@@ -18,7 +19,7 @@ const UserSchema: Schema<IUser> = new Schema(
 			trim: true,
 			match: /https?:\/\/(?:www\.)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:\/\S*)?/,
 		},
-		videos: [{ type: Schema.Types.ObjectId, ref: 'Ad' }],
+		videos: [{ type: Schema.Types.ObjectId, ref: 'Video' }],
 	},
 	{ timestamps: true }
 );
