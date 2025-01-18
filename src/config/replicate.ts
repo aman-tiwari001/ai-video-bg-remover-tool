@@ -16,8 +16,8 @@ export const submitVideoToReplicate = async (
 				input_video: inputVideoUrl,
 			},
 			outputType,
-			// webhook: 'https://my-example.app/webhooks/replicate',
-			// webhook_events_filter: ['completed'],
+			webhook: 'https://ai-video-bg-remover-tool.vercel.app/api/webhooks/replicate',
+			webhook_events_filter: ['completed'],
 		}),
 	});
 	const data = await response.json();

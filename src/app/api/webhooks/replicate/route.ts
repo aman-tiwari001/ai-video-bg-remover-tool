@@ -1,5 +1,7 @@
+import { uploadToCloudinary } from '@/config/cloudinary';
 import VideoModel from '@/models/video';
 
+//Webhook endpoint to receive the output video URL from Replicate
 export async function POST(req: Request) {
 	try {
 		const { id, output } = await req.json();
@@ -11,9 +13,10 @@ export async function POST(req: Request) {
 				{ status: 400 }
 			);
 		}
+    const cloudinaryUrl = await uploadToCloudinary(output, 'video');
 		const video = await VideoModel.findOneAndUpdate(
 			{ replicateId: id },
-			{ outputVideoUrl: output }
+			{ outputVideoUrl: cloudinaryUrl }
 		);
 		if (!video) {
 			return Response.json(

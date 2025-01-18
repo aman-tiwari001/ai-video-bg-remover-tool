@@ -3,9 +3,11 @@ import { FileUploaderMinimal } from '@uploadcare/react-uploader/next';
 import '@uploadcare/react-uploader/core.css';
 import { FormEvent, useState } from 'react';
 import { toast } from 'react-hot-toast';
+import Image from 'next/image';
 
 const RemoveBgPage = () => {
 	const [video, setVideo] = useState<string | null>(null);
+	const [loading, setLoading] = useState<boolean>(false);
 	const [outputType, setOutputType] = useState<
 		'green-screen' | 'alpha-mask' | 'foreground-mask'
 	>('green-screen');
@@ -15,23 +17,32 @@ const RemoveBgPage = () => {
 		if (!video) {
 			toast.error('Please upload a video');
 		}
-		const response = await fetch('/api/remove-bg', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				inputVideoUrl: video,
-				output_type: outputType,
-			}),
-		});
-    const data = await response.json();
-    console.log('data-> ', data);
+		try {
+			setLoading(true);
+			const response = await fetch('/api/remove-bg', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					inputVideoUrl: video,
+					output_type: outputType,
+				}),
+			});
+			const data = await response.json();
+			toast.success('Request queued!');
+			console.log('data-> ', data);
+		} catch (error) {
+			console.log('Error processing video: ', error);
+			toast.error('Error processing video');
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	return (
-		<div className='h-[calc(100vh-67.2px)] flex flex-col items-center justify-center mt-[67.2px]'>
-			<div className='rounded-xl p-10 w-[40%] bg-white shadow-md border'>
+		<div className='h-[calc(100vh-67.2px)] flex w-full flex-col items-center justify-center mt-[67.2px]'>
+			<div className='rounded-xl p-10 max-md:w-[90%] w-[40%] bg-white shadow-md border'>
 				<h1 className='text-3xl text-grad mb-10 text-center'>
 					Remove Video BG
 				</h1>
@@ -70,7 +81,19 @@ const RemoveBgPage = () => {
 							<option value='foreground-mask'>Foreground Mask</option>
 						</select>
 					</div>
-					<button className='btn-primary mt-4'>Process Video</button>
+					<button className='btn-primary mt-4 text-center'>
+						{loading ? (
+							<Image
+								className='animate-spin mx-auto'
+								src='/loader.svg'
+								width={36}
+								height={36}
+								alt='loader'
+							/>
+						) : (
+							'Process Video'
+						)}
+					</button>
 				</form>
 			</div>
 		</div>
