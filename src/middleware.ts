@@ -6,10 +6,14 @@ const isProtectedRoute = createRouteMatcher([
 	'/api/(.*)',
 ]);
 
+const isExcludedRoute = createRouteMatcher([
+	'/api/auth',
+]);
+
 export default clerkMiddleware(async (auth, req) => {
 	const { userId, redirectToSignIn } = await auth();
 	console.log('req.url', req.url);
-	if (!userId && isProtectedRoute(req)) {
+	if (!userId && isProtectedRoute(req) && !isExcludedRoute(req)) {
 		if (req.url.includes('/api/')) {
 			return new Response(
 				JSON.stringify({ success: false, error: 'Not Authenticated' }),
