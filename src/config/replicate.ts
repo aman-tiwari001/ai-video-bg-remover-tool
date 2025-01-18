@@ -2,6 +2,7 @@ export const submitVideoToReplicate = async (
 	inputVideoUrl: string,
 	outputType: string
 ) => {
+  console.log('inputVideoUrl-> ', inputVideoUrl, 'outputType-> ', outputType);
 	const response = await fetch('https://api.replicate.com/v1/predictions', {
 		method: 'POST',
 		headers: {
