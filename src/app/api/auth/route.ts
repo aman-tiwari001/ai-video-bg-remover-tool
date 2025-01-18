@@ -5,13 +5,14 @@ export async function POST(req: Request) {
 	try {
 		await connectToDb();
 		const { data } = await req.json();
+		console.log('data-> ', data);
 		if (!data) {
 			return Response.json(
 				{ success: false, error: 'Missing required fields.' },
 				{ status: 400 }
 			);
 		}
-		const { first_name, last_name, email_addresses, image_url, userId } = data;
+		const { first_name, last_name, email_addresses, image_url, id } = data;
 		const email = email_addresses[0].email_address;
 		const existingUser = await UserModel.findOne({ email });
 		if (existingUser) {
@@ -21,7 +22,7 @@ export async function POST(req: Request) {
 			);
 		}
 		const user = await UserModel.create({
-			clerkId: userId,
+			clerkId: id,
 			firstName: first_name,
 			lastName: last_name,
 			email,
