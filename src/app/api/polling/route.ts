@@ -1,8 +1,10 @@
+import { connectToDb } from '@/config/db';
 import VideoModel from '@/models/video';
 import { NextRequest } from 'next/server';
 
 export async function GET(req: NextRequest) {
 	try {
+    await connectToDb();
 		const searchParams = req.nextUrl.searchParams;
 		const replicateId = searchParams.get('replicateId');
 		if (!replicateId) {

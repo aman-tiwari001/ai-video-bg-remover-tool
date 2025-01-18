@@ -1,9 +1,11 @@
 import { uploadToCloudinary } from '@/config/cloudinary';
+import { connectToDb } from '@/config/db';
 import VideoModel from '@/models/video';
 
 //Webhook endpoint to receive the output video URL from Replicate
 export async function POST(req: Request) {
 	try {
+    await connectToDb();
 		const { id, output } = await req.json();
     console.log('job id-> ', id);
     console.log('output vid-> ', output);

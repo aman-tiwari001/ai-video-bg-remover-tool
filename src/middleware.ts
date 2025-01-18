@@ -8,6 +8,7 @@ const isProtectedRoute = createRouteMatcher([
 
 const isExcludedRoute = createRouteMatcher([
 	'/api/auth',
+	'/api/webhooks/replicate'
 ]);
 
 export default clerkMiddleware(async (auth, req) => {

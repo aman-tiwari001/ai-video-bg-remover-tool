@@ -16,6 +16,7 @@ const RemoveBgPage = () => {
 		e.preventDefault();
 		if (!video) {
 			toast.error('Please upload a video');
+			return;
 		}
 		try {
 			setLoading(true);
@@ -26,7 +27,7 @@ const RemoveBgPage = () => {
 				},
 				body: JSON.stringify({
 					inputVideoUrl: video,
-					output_type: outputType,
+					outputType,
 				}),
 			});
 			const data = await response.json();
@@ -81,7 +82,7 @@ const RemoveBgPage = () => {
 							<option value='foreground-mask'>Foreground Mask</option>
 						</select>
 					</div>
-					<button className='btn-primary mt-4 text-center'>
+					<button disabled={loading} className='btn-primary mt-4 text-center'>
 						{loading ? (
 							<Image
 								className='animate-spin mx-auto'

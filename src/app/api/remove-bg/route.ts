@@ -1,4 +1,5 @@
 import { uploadToCloudinary } from '@/config/cloudinary';
+import { connectToDb } from '@/config/db';
 import { submitVideoToReplicate } from '@/config/replicate';
 import UserModel from '@/models/user';
 import VideoModel from '@/models/video';
@@ -6,7 +7,9 @@ import { auth } from '@clerk/nextjs/server';
 
 export async function POST(req: Request) {
 	try {
+    await connectToDb();
 		const { inputVideoUrl, outputType } = await req.json();
+    console.log('inputVideoUrl-> ', inputVideoUrl, 'outputType-> ', outputType);
 		if (!inputVideoUrl) {
 			return Response.json(
 				{ success: false, error: 'Missing required fields.' },
@@ -21,8 +24,8 @@ export async function POST(req: Request) {
 		// Create a document in Videos collection
 		const { userId } = await auth();
 		const video = await VideoModel.create({
-			inputVideoUrl: cloudinaryUrl,
 			replicateId: output.id,
+			inputVideoUrl: cloudinaryUrl,
 		});
 		const user = await UserModel.findOneAndUpdate(
 			{ clerkId: userId },
