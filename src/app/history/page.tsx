@@ -1,6 +1,6 @@
 'use client';
 
-import { DownloadCloudIcon, DownloadIcon } from 'lucide-react';
+import { DownloadIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
